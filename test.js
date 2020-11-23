@@ -18,3 +18,9 @@ test('async', async t => {
 test('sync', t => {
 	asserter(t, activeWin.sync());
 });
+
+test('isPermissionGranted', t => {
+	const result = activeWin.isAccessGranted();
+	console.log('result', result);
+	t.is(typeof result, 'boolean');
+});
