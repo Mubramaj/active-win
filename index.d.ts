@@ -139,7 +139,7 @@ declare const activeWin: {
 	 * Returns true if there is enough access, false otherwise
 	 * To prompt user with a dialog to give access call activeWin() or activeWin.sync()
 	 */
-	iAccessGranted(): boolean;
+	isAccessGranted(): boolean;
 };
 
 export = activeWin;
