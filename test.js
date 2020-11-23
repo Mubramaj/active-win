@@ -19,8 +19,7 @@ test('sync', t => {
 	asserter(t, activeWin.sync());
 });
 
-test('isPermissionGranted', t => {
+test('isAccessGranted', t => {
 	const result = activeWin.isAccessGranted();
-	console.log('result', result);
 	t.is(typeof result, 'boolean');
 });
