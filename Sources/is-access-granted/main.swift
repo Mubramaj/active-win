@@ -1,7 +1,9 @@
 /* Executable that will return a JSON with the granted permissions:
  *  {
- * 		"isAccessibilityGranted": boolean
- * 		"isScreenRecordingGranted": boolean
+ * 		"all": boolean
+ * 		"screen": boolean,
+      "accessibility": boolean,
+      "browserURL": boolean
  *	}
  *  
  */
