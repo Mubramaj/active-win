@@ -1,12 +1,28 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
-	name: "active-win",
-	targets: [
-		.target(name: "active-win"),
-		.target(
+	name: "ActiveWin",
+	products: [
+		.executable(
+			name: "active-win",
+			targets: [
+				"ActiveWinCLI"
+			]
+		),
+		.executable(
 			name: "is-access-granted",
-			path: "Sources/is-access-granted")
+			targets: [
+				"IsAccessGrantedCLI"
+			]
+		)
+	],
+	targets: [
+		.executableTarget(
+			name: "ActiveWinCLI"
+		),
+		.executableTarget(
+			name: "IsAccessGrantedCLI"
+		)
 	]
 )

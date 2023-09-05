@@ -1,24 +1,22 @@
-# active-win [![Build Status](https://travis-ci.org/sindresorhus/active-win.svg?branch=master)](https://travis-ci.org/sindresorhus/active-win)
+# active-win
 
 Get metadata about the [active window](https://en.wikipedia.org/wiki/Active_window) (title, id, bounds, owner, URL, etc)
 
-Works on macOS, Linux, Windows.
-
-Users on macOS 10.13 or earlier needs to download the [Swift runtime support libraries](https://support.apple.com/kb/DL1998).
+Works on macOS 10.14+, Linux ([note](#linux-support)), and Windows 7+.
 
 ## Install
 
-```
-$ npm install active-win
+```sh
+npm install active-win
 ```
 
 ## Usage
 
 ```js
-const activeWin = require('active-win');
+const activeWindow = require('active-win');
 
 (async () => {
-	console.log(await activeWin());
+	console.log(await activeWindow(options));
 	/*
 	{
 		title: 'Unicorns - Google Search',
@@ -42,18 +40,30 @@ const activeWin = require('active-win');
 })();
 ```
 
-
 ## API
 
-### activeWin()
+### activeWindow(options?)
 
-Returns a `Promise<Object>` with the result, or `Promise<undefined>` if there is no active window or if the information is not available.
+Get metadata about the active window.
 
-### activeWin.sync()
+#### options
 
-Returns an `Object` with the result, or `undefined` if there is no active window.
+Type: `object`
+
+##### screenRecordingPermission **(macOS only)**
+
+Type: `boolean`\
+Default: `true`
+
+Enable the screen recording permission check. Setting this to `false` will prevent the screen recording permission prompt on macOS versions 10.15 and newer. The `title` property in the result will always be set to an empty string.
+
+### activeWindow.sync(options?)
+
+Get metadata about the active window synchronously.
 
 ## Result
+
+Returns a `Promise<object>` with the result, or `Promise<undefined>` if there is no active window or if the information is not available.
 
 - `platform` *(string)* - `'macos'` | `'linux'` | `'windows'`
 - `title` *(string)* - Window title
@@ -68,28 +78,64 @@ Returns an `Object` with the result, or `undefined` if there is no active window
 	- `processId` *(number)* - Process identifier
 	- `bundleId` *(string)* - Bundle identifier *(macOS only)*
 	- `path` *(string)* - Path to the app
-- `url` *(string?)* - URL of the active browser tab if the active window is Safari, Chrome, Edge, or Brave *(macOS only)*
+- `url` *(string?)* - URL of the active browser tab if the active window *(macOS only)*
+	- Supported browsers: Safari (includes Technology Preview), Chrome (includes Beta, Dev, and Canary), Edge (includes Beta, Dev, and Canary), Brave (includes Beta and Nightly), Mighty, Ghost Browser, Wavebox, Sidekick, Opera (includes Beta and Developer), or Vivaldi
 - `memoryUsage` *(number)* - Memory usage by the window owner process
 
 ### activeWin.isAccessGranted()
 
-Checks if the app has enough access to get the active window
+Check if the package has enough access to get the active window.
+
 Returns `true` if there is enough access, `false` otherwise.
 
-To prompt user with a dialog to give access call activeWin() or activeWin.sync()
+### activeWindow.getOpenWindows()
+
+Get metadata about all open windows.
+
+Windows are returned in order from front to back.
+
+Returns `Promise<activeWindow.Result[]>`.
+
+### activeWindow.getOpenWindowsSync()
+
+Get metadata about all open windows synchronously.
+
+Windows are returned in order from front to back.
+
+Returns `activeWindow.Result[]`.
 
 ## OS support
 
-It works on macOS, Linux, and Windows 7+.
+It works on macOS 10.14+, Linux, and Windows 7+.
 
-**Note**: On Windows, there isn't a clear notion of a "Window ID". Instead it returns the memory address of the window "handle" in the `id` property. That "handle" is unique per window, so it can be used to identify them. [Read more…](https://msdn.microsoft.com/en-us/library/windows/desktop/ms632597(v=vs.85).aspx#window_handle).
+**Note**: On Windows, there isn't a clear notion of a "Window ID". Instead it returns the memory address of the window "handle" in the `id` property. That "handle" is unique per window, so it can be used to identify them. [Read more…](https://msdn.microsoft.com/en-us/library/windows/desktop/ms632597(v=vs.85).aspx#window_handle)
+
+### Linux support
+
+Wayland is not supported. For security reasons, Wayland does not provide a way to identify the active window. [Read more…](https://stackoverflow.com/questions/45465016)
+
+## Electron usage
+
+If you use this package in an Electron app that is sandboxed and you want to get the `.url` property, you need to add the [proper entitlements and usage description](https://github.com/sindresorhus/active-win/issues/99#issuecomment-870874546).
+
+## Users
+
+- [active-win-log](https://github.com/uglow/active-win-log) - Window-usage logging CLI.
+- [active-app-qmk-layer-updater](https://github.com/zigotica/active-app-qmk-layer-updater) - Sends the active app info to a QMK device to change keymap layers automatically.
 
 ## Related
 
 - [active-win-cli](https://github.com/sindresorhus/active-win-cli) - CLI for this module
-- [active-win-log](https://github.com/uglow/active-win-log) - Window-usage logging CLI using this module
 
 ## Maintainers
 
 - [Sindre Sorhus](https://github.com/sindresorhus)
 - [Sebastián Ramírez](https://github.com/tiangolo)
+
+## Development
+
+To bypass the `gyp` build:
+
+```sh
+npm install --ignore-scripts
+```
