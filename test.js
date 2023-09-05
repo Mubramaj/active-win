@@ -59,8 +59,3 @@ test('isAccessGranted', t => {
 
 	t.is(typeof result.all, 'boolean');
 });
-
-test('isAccessGranted', t => {
-	const result = activeWin.isAccessGranted();
-	t.is(typeof result, 'boolean');
-});
