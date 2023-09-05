@@ -35,7 +35,7 @@ test('activeWindow.getOpenWindowsSync', t => {
 });
 
 test('isAccessGranted', t => {
-	const result = activeWin.isAccessGranted();
+	const result = activeWindow.isAccessGranted();
 	switch (process.platform) {
 		case 'darwin': {
 			t.is(typeof result.all, 'boolean');
